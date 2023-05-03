@@ -167,6 +167,7 @@ Now comes the part where we check how our model is doing on test set images usin
 %cd /content/yolov5/
 !python detect.py --weights weights/last_yolov5s_results.pt --img 416 --conf 0.4 --source ../test/images
 ```
+![Screenshot (12)](https://user-images.githubusercontent.com/38422983/235997254-e443237a-cfbf-4dc0-ac94-a8553035af77.png)
 
 
 REMEMBER: The model that I have attached was only trained on 998 images. PLEASE train on all the images in SKU dataset for optimum results.
