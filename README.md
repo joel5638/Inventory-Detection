@@ -1,7 +1,6 @@
-## Retail Store Item Detection using YOLOv5
+## Yolov5 Market Shelf Item Detections
 In this repository, I present an application of the latest version of YOLO i.e. YOLOv5, to detect items present in a retail store shelf. This application can be used to keep track of inventory of items simply using images of the items on shelf.
 
-![Result image](https://github.com/shayanalibhatti/Retail-Store-Item-Detection-using-YOLOv5/blob/master/results.png)
 
 ## Introduction
 Object detection is a computer vision task that requires object(s) to be detected, localized and classified. In this task, first we need our machine learning model to tell if any object of interest is present in the image. If present, then draw a bounding box around the object(s) present in the image. In the end, the model must classify the object represented by the bounding box. This task requires fast object detection so that it can be implemented  in real-time. One of its major applications is its use in real-time object detection in self-driving vehicles.
@@ -10,7 +9,6 @@ Joseph Redmon, et al. originally designed YOLOv1, v2 and v3 models that perform 
 
 Each of the versions of YOLO kept improving the previous in accuracy and performance. Then came YOLOv4 developed by another team, further adding to performance of model and finally the YOLOv5 model was introduced by Glenn Jocher in June 2020. This model significantly reduces the model size (YOLOv4 on Darknet had 244MB size whereas YOLOv5 smallest model is of 27MB). YOLOv5 also claims a faster accuracy and more frames per second than YOLOv4 as shown in graph below, taken from Roboflow.ai's website.
 
-![yolo_vs_detnet](https://github.com/shayanalibhatti/Retail-Store-Item-Detection-using-YOLOv5/blob/master/yolo%20vs%20efficientdet.png)
 
 Fig 1.1: Comparison of YOLOv5 vs EfficientDetNet
 
@@ -19,7 +17,6 @@ In this article, I will only focus on the use of YOLOv5 for retail item detectio
 ## Objective
 To use YOLOv5 to draw bounding boxes over retail products in pictures using SKU110k dataset.
 
-![Result image](https://github.com/shayanalibhatti/Retail-Store-Item-Detection-using-YOLOv5/blob/master/results.png)
 
 Fig 1.2: Store shelf image (on left) vs desired output with bounding box drawn on objects (right)
 
@@ -42,7 +39,6 @@ From the dataset, I took only 998 images from the training set and went to Robof
 ### Preprocessing
 Preprocessing of images includes resizing them to 416x416x3. This is done on Roboflow's platform. An annotated, resized image is shown in figure below:
 
-![Annotated image](https://github.com/shayanalibhatti/Retail-Store-Item-Detection-using-YOLOv5/blob/master/roboflow_data_image_annotated.jpg)
 
 Fig 1.3: Image annotated by Roboflow
 
@@ -75,9 +71,6 @@ Next, I download the dataset that I created at Roboflow.ai. The following code w
 %cd /content
 !curl -L "ADD THE KEY OBTAINED FROM ROBOFLOW" > roboflow.zip; unzip roboflow.zip; rm roboflow.zip
 ```
-
-This file tells the model the location path of training and validation set images alongwith the number of classes and the names of classes. For this task, number of classes is "1" and the name of class is "object" as we are only looking to predict bounding boxes. data.yaml file can be seen below:
-![yaml](https://github.com/shayanalibhatti/Retail-Store-Item-Detection-using-YOLOv5/blob/master/data_yaml.jpg)
 
 ### Network Architecture
 Next let's define the network architecture for YOLOv5. It is the same architecture used by the author Glenn Jocher for training on COCO dataset. I didnt change anything in the network. However, few tweaks were needed to change bounding box size, color and also to remove labels otherwise labels would jumble the image because of so many boxes. These tweaks were made in detect.py and utils.py file. The network is saved as custom_yolov5.yaml file.
@@ -168,10 +161,6 @@ The following 3 parameters are commonly used for object detection tasks:
 · mAP is the mean Average Precision telling how correct are our bounding box predictions on average. It is area under curve of precision-recall curve.
 It is seen that Generalized Intersection over Union (GIoU) loss and objectness loss decrease both for training and validation. Mean Average Precision (mAP) however is at 0.7 for bounding box IoU threshold of 0.5. Recall stands at 0.8 as shown below:
 
-![Observations](https://github.com/shayanalibhatti/Retail-Store-Item-Detection-using-YOLOv5/blob/master/observations.png)
-
-Fig 1.4: Observations of important parameters of model training
-
 Now comes the part where we check how our model is doing on test set images using the following code:
 ```
 # when we ran this, we saw .007 second inference time. That is 140 FPS on a TESLA P100!
@@ -179,12 +168,6 @@ Now comes the part where we check how our model is doing on test set images usin
 !python detect.py --weights weights/last_yolov5s_results.pt --img 416 --conf 0.4 --source ../test/images
 ```
 
-## Results
-Following images show the result of our YOLOv5 algorithm trained to draw bounding boxes on objects. The results are pretty good. 
-
-![results](https://github.com/shayanalibhatti/Retail-Store-Item-Detection-using-YOLOv5/blob/master/result1.jpg)
-
-Fig 1.5: Original test set image (on left) and bounding boxes drawn images by YOLOv5 (on right) 
 
 REMEMBER: The model that I have attached was only trained on 998 images. PLEASE train on all the images in SKU dataset for optimum results.
 
